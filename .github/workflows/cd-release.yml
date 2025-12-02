@@ -1,0 +1,32 @@
+name: CD Auto Release
+
+# Trigger this ONLY when code is pushed (merged) to main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to create a release
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 1. Zip the plugin folder
+    - name: Zip Plugin
+      run: |
+        mkdir wp-devops-health
+        cp wp-devops-health.php wp-devops-health/
+        zip -r wp-devops-health.zip wp-devops-health
+
+    # 2. Create a Release on GitHub and upload the Zip
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.run_number }} # Auto-increment version based on run number
+        files: wp-devops-health.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

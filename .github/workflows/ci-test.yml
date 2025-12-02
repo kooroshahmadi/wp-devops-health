@@ -1,0 +1,24 @@
+name: CI Code Checker
+
+# Trigger this action when a Pull Request is opened
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+    steps:
+    # 1. Get the code
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Setup PHP
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+
+    # 3. Run the Syntax Check
+    - name: Check PHP Syntax
+      run: find . -name "*.php" -print0 | xargs -0 -n1 php -l
