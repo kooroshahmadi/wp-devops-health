@@ -8,7 +8,7 @@ Author: DevOps Intern
 
 // Prevent direct access to this file
 if (!defined('ABSPATH')) {
-    exit
+    exit;
 }
 
 // Register the API Endpoint
